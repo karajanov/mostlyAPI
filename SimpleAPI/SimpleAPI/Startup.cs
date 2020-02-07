@@ -1,15 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SimpleAPI.Models;
+using SimpleAPI.Services;
+using SimpleAPI.Services.Interfaces;
 
 namespace SimpleAPI
 {
@@ -27,8 +25,13 @@ namespace SimpleAPI
         {
             services.AddControllersWithViews();
 
-            //services.AddDbContext<FinalDB_IPContext>(options =>
-            //    options.UseSqlServer(Configuration.GetConnectionString("Default")));
+            services.AddDbContext<StudentsLoggerBaseContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("Default")));
+
+            services.AddTransient<IStudentRepository, StudentRepository>()
+                    .AddTransient<ICourseRepository, CourseRepository>()
+                    .AddTransient<IEnrolledInRepository, EnrolledInRepository>()
+                    .AddTransient<IActivitiesRepository, ActivitiesRepository>();
 
             services
                  .AddAutoMapper(typeof(Startup));
