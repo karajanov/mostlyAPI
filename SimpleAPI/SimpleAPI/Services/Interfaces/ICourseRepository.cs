@@ -5,7 +5,7 @@ namespace SimpleAPI.Services.Interfaces
 {
     public interface ICourseRepository : IRepository<Course>
     {
-        Task<bool> EnrollStudentAsync(int id);
-        Task<bool> EnrollStudentsAsync(int[] ids);
+        Task<bool> EnrollStudentAsync(int studentId, int courseId);
+        Task<bool> EnrollStudentsAsync(int[] studentIds, int courseId);
     }
 }

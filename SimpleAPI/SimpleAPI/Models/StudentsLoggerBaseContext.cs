@@ -24,7 +24,7 @@ namespace SimpleAPI.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=localhost; Database=StudentsLoggerBase; User Id=sa; Password=Borjan3963();");
+                optionsBuilder.UseSqlServer(Configuration.GetConnectionString("Default"));
             }
         }
 

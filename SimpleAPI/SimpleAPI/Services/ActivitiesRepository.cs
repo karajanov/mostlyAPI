@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SimpleAPI.Models;
+using SimpleAPI.Models.Enums;
 using SimpleAPI.Services.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +16,8 @@ namespace SimpleAPI.Services
         }
 
         public async Task<IEnumerable<Activities>> GetAllByTypeAsync(EActivityType type)
-        {
+        { 
+            
             var activities = await (from a in GetDbSet()
                                     where (EActivityType)a.ActivityType == type
                                     select a).ToListAsync();

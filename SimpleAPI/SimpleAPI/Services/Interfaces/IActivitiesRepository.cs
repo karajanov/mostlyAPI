@@ -1,4 +1,5 @@
 ﻿using SimpleAPI.Models;
+using SimpleAPI.Models.Enums;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

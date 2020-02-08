@@ -1,27 +1,75 @@
 ﻿using SimpleAPI.Models;
 using SimpleAPI.Services.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SimpleAPI.Services
 {
     public class CourseRepository : Repository<Course>, ICourseRepository
     {
-        public CourseRepository(StudentsLoggerBaseContext context)
+        private readonly IStudentRepository studentRepository;
+        private readonly IEnrolledInRepository enrolledInRepository;
+
+        public CourseRepository(StudentsLoggerBaseContext context, IStudentRepository studentRepository,
+            IEnrolledInRepository enrolledInRepository)
             :base(context)
         {
+            this.studentRepository = studentRepository;
+            this.enrolledInRepository = enrolledInRepository;
         }
 
-        public Task<bool> EnrollStudentAsync(int id)
+        public async Task<bool> EnrollStudentAsync(int studentId, int courseId)
         {
-            throw new NotImplementedException();
+           
+            var enrolledInInfo = new EnrolledIn()
+            {
+                StudentId = studentId,
+                CourseId = courseId,
+                StudentYear = System.DateTime.Now.Year.ToString()
+            };
+
+            try
+            {
+                await enrolledInRepository.InsertAsync(enrolledInInfo);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
         }
 
-        public Task<bool> EnrollStudentsAsync(int[] ids)
+        public async Task<bool> EnrollStudentsAsync(int[] studentIds, int courseId)
         {
-            throw new NotImplementedException();
+    
+            foreach (var item in studentIds)
+            {
+                var existingStudent = await studentRepository.GetByIdAsync(item);
+
+                if (existingStudent != null)
+                {
+                    var enrolledInInfo = new EnrolledIn()
+                    {
+                        StudentId = item,
+                        CourseId = courseId,
+                        StudentYear = System.DateTime.Now.Year.ToString()
+                    };
+
+                    try
+                    {
+                        await enrolledInRepository.InsertAsync(enrolledInInfo);
+                    }
+                    catch (Exception)
+                    {
+                        return false;
+                    }
+
+                }
+            }
+
+            return true;
         }
+
     }
 }
