@@ -27,16 +27,11 @@ namespace SimpleAPI.Controllers.API
             if (studentId == 0 || courseId == 0)
                 return new HttpResponseMessage(System.Net.HttpStatusCode.NotFound);
 
-            try
-            {
-                await courseRepository.EnrollStudentAsync(studentId, courseId);
-            }
-            catch (Exception)
-            {
-                return new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
-            }
+            var success = await courseRepository.EnrollStudentAsync(studentId, courseId);
 
-            return new HttpResponseMessage(System.Net.HttpStatusCode.Created);
+            return success ?
+                new HttpResponseMessage(System.Net.HttpStatusCode.Created)
+                : new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
         }
 
 
