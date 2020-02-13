@@ -5,6 +5,7 @@ namespace SimpleAPI.Models.DataTransferObjects
 {
     public class StudentViewModel
     {
+
         [StringLength(50)]
         public string StudentName { get; set; }
 

@@ -1,12 +1,11 @@
 ﻿using SimpleAPI.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SimpleAPI.Services.Interfaces
 {
     public interface IEnrolledInRepository : IRepository<EnrolledIn>
     {
+        Task<bool> EnrollStudentAsync(int studentId, int courseId);
+        Task<bool> EnrollStudentsAsync(int[] studentIds, int courseId);
     }
 }

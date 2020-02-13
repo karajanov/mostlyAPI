@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SimpleAPI.Models;
 using SimpleAPI.Models.Enums;
+using SimpleAPI.Models.QueryModels;
 using SimpleAPI.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -20,8 +22,11 @@ namespace SimpleAPI.Controllers.API
 
         [HttpGet]
         [Route("Type/{type}")] // api/Activities/Type/{type}
-        public async Task<IEnumerable<Activities>> GetAllByTypeAsync(EActivityType type)
+        public async Task<IEnumerable<QActivitiesByType>> GetAllByTypeAsync(EActivityType type)
         {
+            if (!Enum.IsDefined(typeof(EActivityType), type))
+                return new List<QActivitiesByType>();
+
             return await activitiesRepository.GetAllByTypeAsync(type);
         }
 
@@ -34,7 +39,7 @@ namespace SimpleAPI.Controllers.API
 
         [HttpGet]
         [Route("Course/{id}")] // api/Activities/Course/{id}
-        public async Task<IEnumerable<Activities>> GetAllByTypeAsync(int id)
+        public async Task<IEnumerable<QActivitiesByCourse>> GetAllByCourseAsync(int id)
         {
             return await activitiesRepository.GetByCourseAsync(id);
         }

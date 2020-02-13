@@ -2,7 +2,7 @@
 {
     public enum EActivityType
     {
-        Project,
+        Project = 1,
         Homework,
         Exam
     }

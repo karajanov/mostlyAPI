@@ -1,11 +1,13 @@
 ﻿using SimpleAPI.Models;
+using SimpleAPI.Models.QueryModels;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SimpleAPI.Services.Interfaces
 {
-    public interface ICourseRepository : IRepository<Course>
+    public interface ICourseRepository : IRepository<Course>, IRecordExistence
     {
-        Task<bool> EnrollStudentAsync(int studentId, int courseId);
-        Task<bool> EnrollStudentsAsync(int[] studentIds, int courseId);
+        Task<IEnumerable<QStudentsByCourse>> GetStudentsByCourseAsync(int id);
+        Task<IEnumerable<QActivitiesByCourse>> GetActivitiesByCourseAsync(int id);
     }
 }

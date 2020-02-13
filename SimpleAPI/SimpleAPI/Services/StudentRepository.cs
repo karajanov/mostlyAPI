@@ -63,9 +63,10 @@ namespace SimpleAPI.Services
             return data;
         }
 
-        public async Task<bool> IsStudentExistentAsync(int id)
+        public async Task<bool> IsRecordExistentAsync(int id)
         {
             var s = await GetDbSet()
+                .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id == id);
 
             return s != null;

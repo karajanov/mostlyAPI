@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SimpleAPI.Models;
 using SimpleAPI.Models.DataTransferObjects;
@@ -71,16 +69,18 @@ namespace SimpleAPI.Controllers.API
             }
 
             return new HttpResponseMessage(System.Net.HttpStatusCode.Created);
-
         }
 
         [HttpPut("{id}")] // api/StudentData/{id}
         public async Task<HttpResponseMessage> PutExistingStudentDataAsync(int id, [FromBody] StudentViewModel svm)
         {
-            if (id == 0)
-                return new HttpResponseMessage(System.Net.HttpStatusCode.NotFound);
+            // AsNoTracking() implemented to resolve id conflict with UpdateAsync()
+            var isIdValid = await studentRepository.IsRecordExistentAsync(id);
 
-            if (!ModelState.IsValid)
+            if (id == 0 || !isIdValid)
+                return new HttpResponseMessage(System.Net.HttpStatusCode.NotFound);
+           
+            if(!ModelState.IsValid)
                 return new HttpResponseMessage(System.Net.HttpStatusCode.Forbidden);
 
             try
@@ -100,7 +100,10 @@ namespace SimpleAPI.Controllers.API
         [HttpDelete("{id}")] // api/StudentData/{id}
         public async Task<HttpResponseMessage> DeleteExistingStudentDataAsync(int id)
         {
-            if (id == 0)
+            // AsNoTracking() implemented to resolve id conflict with DeleteAsync()
+            var isIdValid = await studentRepository.IsRecordExistentAsync(id);
+
+            if (id == 0 || !isIdValid)
                 return new HttpResponseMessage(System.Net.HttpStatusCode.NotFound);
 
             try
